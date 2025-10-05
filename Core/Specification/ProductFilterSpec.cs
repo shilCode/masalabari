@@ -1,0 +1,26 @@
+using System;
+using Core.Entities;
+
+namespace Core.Specification;
+
+public class ProductFilterSpec : BaseSpecification<Product>
+{
+    public ProductFilterSpec(string? brand, string? type, string? sort) : base(
+        x => (string.IsNullOrWhiteSpace(brand) || x.Brand == brand) &&
+        (string.IsNullOrWhiteSpace(type) || x.Type == type)
+    )
+    {
+        switch (sort)
+        {
+            case "priceAsc":
+                AddOrderBy(x => x.Price);
+                break;
+            case "priceDesc":
+                AddOrderByDesc(x => x.Price);
+                break;
+            default:
+                AddOrderBy(x => x.Name);
+                break;
+        }
+    }
+}
