@@ -29,6 +29,10 @@ public class SpecEval<T> where T : BaseEntities
             query = query.Distinct();
         }
 
+        if(spec.isPagingEnable)
+        {
+            query = query.Skip(spec.Skip).Take(spec.Take);
+        }
         return query;
     }
     public static IQueryable<TResult> GetQuery<TSspec, TResult>(IQueryable<T> query, ISpecification<T, TResult> spec)
@@ -56,6 +60,10 @@ public class SpecEval<T> where T : BaseEntities
         if (spec.isDistinct)
         {
             selectQuery = selectQuery?.Distinct();
+        }
+        if (spec.isPagingEnable)
+        {
+            selectQuery = selectQuery?.Skip(spec.Skip).Take(spec.Take);
         }
         return selectQuery ?? query.Cast<TResult>();
     }
